@@ -8,11 +8,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #282420;
-      --bg-card: #322e28;
-      --bg-input: #3a352e;
-      --border: #4a443c;
-      --border-focus: #5a5348;
+      --bg: #0a0a0a;
+      --bg-card: #141414;
+      --bg-input: #1a1a1a;
+      --border: #2a2a2a;
+      --border-focus: #4a4a4a;
       --page-bg: #f5f5f0;
       --text: #e8e8e8;
       --text-muted: #888;
@@ -41,23 +41,43 @@
 
     /* --- Layout --- */
     .container {
-      max-width: 780px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 24px 24px 16px;
     }
 
     .tool-box {
       background: var(--bg);
-      border-radius: 20px;
-      padding: 40px 32px;
+      border-radius: 16px;
+      padding: 48px 56px;
       color: var(--text);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 20px 0 12px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .page-footer a {
+      color: #999;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    .page-footer a:hover {
+      color: #666;
     }
 
     @media (max-width: 600px) {
+      .container {
+        padding: 16px 12px 12px;
+      }
       .tool-box {
-        padding: 24px 16px;
-        border-radius: 14px;
+        padding: 24px 18px;
+        border-radius: 12px;
       }
     }
 
@@ -307,6 +327,7 @@
       display: flex;
       gap: 12px;
       margin-top: 32px;
+      justify-content: flex-end;
     }
 
     /* --- Divider --- */
@@ -652,9 +673,9 @@
 <div class="container">
 
   <!-- Logo -->
-  <div style="text-align:center;margin-bottom:2rem;">
+  <div style="text-align:center;margin-bottom:1.5rem;">
     <a href="https://vogler-marketing-26-04.webflow.io/" style="display:inline-block;">
-      <img src="https://cdn.prod.website-files.com/69de227433c0933c1c992ef8/69de2c7755f294bbcdd6a363_vm%20rebranding.png" alt="Vogler Marketing" style="height:40px;width:auto;">
+      <img src="https://s3.amazonaws.com/webflow-prod-assets/69de227433c0933c1c992ef8/69df70be48745487529a2c40_vm%20rebranding.png" alt="Vogler Marketing" style="height:36px;width:auto;">
     </a>
   </div>
 
@@ -1016,6 +1037,14 @@
     <p>Marketing-ROI-Rechner von Vogler Marketing</p>
   </footer>
 
+  </div><!-- /tool-box -->
+
+  <div class="page-footer">
+    <a href="https://vogler-marketing-26-04.webflow.io/impressum">Impressum</a> ·
+    <a href="https://vogler-marketing-26-04.webflow.io/impressum">Datenschutz</a> ·
+    <a href="https://vogler-marketing-26-04.webflow.io/impressum">AGB</a>
+  </div>
+
 <script>
 // ============================================================
 // FORMATTING HELPERS
@@ -1316,7 +1345,6 @@ function submitExport() {
 }
 </script>
 
-  </div><!-- /tool-box -->
 
 </div><!-- /container -->
 
