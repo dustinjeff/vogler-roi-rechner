@@ -11,6 +11,7 @@
       --bg-input: #3a352e;
       --border: #4a443c;
       --border-focus: #5a5348;
+      --page-bg: #f5f5f0;
       --text: #e8e8e8;
       --text-muted: #888;
       --text-dim: #666;
@@ -30,17 +31,32 @@
 
     body {
       font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
+      background: var(--page-bg);
+      color: #333;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
 
     /* --- Layout --- */
     .container {
-      max-width: 720px;
+      max-width: 780px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 40px 20px;
+    }
+
+    .tool-box {
+      background: var(--bg);
+      border-radius: 20px;
+      padding: 40px 32px;
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 600px) {
+      .tool-box {
+        padding: 24px 16px;
+        border-radius: 14px;
+      }
     }
 
     header {
@@ -634,11 +650,13 @@
 <div class="container">
 
   <!-- Logo -->
-  <div style="text-align:center;margin-bottom:2rem;padding-top:1rem;">
+  <div style="text-align:center;margin-bottom:2rem;">
     <a href="https://vogler-marketing-26-04.webflow.io/" style="display:inline-block;">
-      <img src="https://cdn.prod.website-files.com/69de227433c0933c1c992ef8/69de2c9055f294bbcdd6a529_vm%20rebranding_weiss.png" alt="Vogler Marketing" style="height:40px;width:auto;">
+      <img src="https://cdn.prod.website-files.com/69de227433c0933c1c992ef8/69de2c7755f294bbcdd6a363_vm%20rebranding.png" alt="Vogler Marketing" style="height:40px;width:auto;">
     </a>
   </div>
+
+  <div class="tool-box">
 
   <!-- Header -->
   <header>
@@ -995,7 +1013,6 @@
   <footer>
     <p>Marketing-ROI-Rechner von Vogler Marketing</p>
   </footer>
-</div>
 
 <script>
 // ============================================================
@@ -1296,5 +1313,10 @@ function submitExport() {
   msg.classList.remove('hidden');
 }
 </script>
+
+  </div><!-- /tool-box -->
+
+</div><!-- /container -->
+
 </body>
 </html>
