@@ -1313,6 +1313,21 @@ function calculateAndShow() {
 // ============================================================
 // SHARE / COPY LINK
 // ============================================================
+// ============================================================
+// AUTO-RESIZE IFRAME (postMessage to parent)
+// ============================================================
+function notifyParentHeight() {
+  var height = document.documentElement.scrollHeight;
+  window.parent.postMessage({type: 'roi-rechner-height', height: height}, '*');
+}
+window.addEventListener('load', function() {
+  notifyParentHeight();
+  new MutationObserver(notifyParentHeight).observe(document.body, {childList: true, subtree: true, attributes: true});
+});
+
+// ============================================================
+// SHARE / COPY LINK
+// ============================================================
 function copyLink() {
   var url = window.location.href.split('?')[0];
   navigator.clipboard.writeText(url).then(function() {
