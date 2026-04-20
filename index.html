@@ -945,7 +945,7 @@
       </div>
       <div class="cta-section">
         <p>Du willst wissen, wie du diese Lücke schließt? In einem 30-minütigen Erstgespräch rechnen wir gemeinsam durch, welche Hebel bei dir am schnellsten wirken.</p>
-        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener">Erstgespräch buchen</a>
+        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener" onclick="trackEvent('rechner_cta_clicked',{rechner:'roi-rechner',cta:'erstgespraech',profile:window._roiResults?window._roiResults.profile:'unknown'})">Erstgespräch buchen</a>
       </div>
     </div>
 
@@ -958,7 +958,7 @@
       </div>
       <div class="cta-section">
         <p>Du bist nah dran &mdash; ein gezielter Eingriff kann den Unterschied machen. Lass uns in 30 Minuten den einen Hebel identifizieren, der bei dir am meisten bewegt.</p>
-        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener">Erstgespräch buchen</a>
+        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener" onclick="trackEvent('rechner_cta_clicked',{rechner:'roi-rechner',cta:'erstgespraech',profile:window._roiResults?window._roiResults.profile:'unknown'})">Erstgespräch buchen</a>
         <div style="margin-top: 16px;">
           <a class="btn btn-secondary" href="https://vogler.marketing/wissen/" target="_blank" rel="noopener" id="r_mixed_article">Passenden Artikel lesen</a>
         </div>
@@ -974,7 +974,7 @@
       </div>
       <div class="cta-section">
         <p>Du machst vieles richtig. Der nächste Schritt ist nicht Effizienz, sondern Volumen &mdash; mehr qualifizierte Anfragen bei stabiler Kostenstruktur.</p>
-        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener">Skalierung besprechen</a>
+        <a class="btn btn-primary" href="https://vogler.marketing/erstgespraech" target="_blank" rel="noopener" onclick="trackEvent('rechner_cta_clicked',{rechner:'roi-rechner',cta:'skalierung',profile:'good'})">Skalierung besprechen</a>
         <div style="margin-top: 16px;">
           <a class="btn btn-secondary" href="https://vogler.marketing/wissen/" target="_blank" rel="noopener">Wie Skalierung ohne Kostensteigerung funktioniert</a>
         </div>
@@ -990,7 +990,7 @@
       </div>
       <div class="cta-section">
         <p>Wir schicken dir alle zwei Wochen eine Analyse zu B2B-Marketing-Trends im DACH-Raum. Kein Spam, keine Verkaufsversuche &mdash; nur Substanz.</p>
-        <a class="btn btn-primary" href="https://vogler.marketing/newsletter" target="_blank" rel="noopener">Newsletter abonnieren</a>
+        <a class="btn btn-primary" href="https://vogler.marketing/newsletter" target="_blank" rel="noopener" onclick="trackEvent('rechner_cta_clicked',{rechner:'roi-rechner',cta:'newsletter',profile:'excellent'})">Newsletter abonnieren</a>
         <div style="margin-top: 16px;">
           <a class="btn btn-secondary" onclick="copyLink()" style="cursor:pointer;">Rechner-Link kopieren und teilen</a>
         </div>
@@ -1046,6 +1046,20 @@
   </div>
 
 <script>
+// ============================================================
+// TRACKING — postMessage to parent (Webflow/GTM)
+// ============================================================
+function trackEvent(eventName, params) {
+  var data = {type: 'vogler-tracking', event: eventName, params: params || {}};
+  // Send to parent (Webflow page with GTM)
+  if (window.parent !== window) {
+    window.parent.postMessage(data, '*');
+  }
+}
+
+// Track tool load
+trackEvent('rechner_started', {rechner: 'roi-rechner'});
+
 // ============================================================
 // FORMATTING HELPERS
 // ============================================================
@@ -1109,6 +1123,10 @@ function goToStep(n) {
     if (tn === n) t.classList.add('active');
     if (tn < n) t.classList.add('completed');
   });
+
+  // Track step navigation
+  var stepNames = {1: 'aktuelle_situation', 2: 'branche', 3: 'ergebnis'};
+  trackEvent('rechner_step', {rechner: 'roi-rechner', step: n, step_name: stepNames[n]});
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1296,6 +1314,8 @@ function calculateAndShow() {
   }
 
   // Store results for potential export
+  var profileType = redCount >= 2 ? 'red' : redCount === 1 ? 'mixed' : greenCount < totalScored ? 'good' : 'excellent';
+
   window._roiResults = {
     totalCostMonth: totalCostMonth, totalCostYear: totalCostYear,
     cpl: cpl, cpql: cpql, cac: cac, clv: clv, clvMargin: clvMargin,
@@ -1303,9 +1323,24 @@ function calculateAndShow() {
     newCustYear: newCustYear, optNewCustYear: optNewCustYear,
     revNow: revNow, dbNow: dbNow, revOpt: revOpt, dbOpt: dbOpt, gap: gap,
     industry: industry, budgetPct: budgetPct,
-    profile: redCount >= 2 ? 'red' : redCount === 1 ? 'mixed' : greenCount < totalScored ? 'good' : 'excellent',
+    profile: profileType,
     redCount: redCount, yellowCount: yellowCount, greenCount: greenCount,
   };
+
+  // --- Tracking: Ergebnis ---
+  trackEvent('rechner_result', {
+    rechner: 'roi-rechner',
+    profile: profileType,
+    industry: industry,
+    cpl: Math.round(cpl),
+    cac: Math.round(cac),
+    marketing_roi: Math.round(marketingROI),
+    ltv_cac: parseFloat(ltvCac.toFixed(1)),
+    gap_eur: Math.round(gap),
+    red_count: redCount,
+    yellow_count: yellowCount,
+    green_count: greenCount
+  });
 
   goToStep(3);
 }
@@ -1335,6 +1370,7 @@ function copyLink() {
     btn.textContent = 'Link kopiert!';
     setTimeout(function() { btn.textContent = 'Rechner-Link kopieren und teilen'; }, 2000);
   });
+  trackEvent('rechner_cta_clicked', {rechner: 'roi-rechner', cta: 'link_teilen'});
 }
 
 // ============================================================
@@ -1351,6 +1387,12 @@ function submitExport() {
     alert('Bitte Vorname und E-Mail-Adresse eingeben.');
     return;
   }
+
+  trackEvent('rechner_lead_capture', {
+    rechner: 'roi-rechner',
+    action: 'pdf_export',
+    profile: window._roiResults ? window._roiResults.profile : 'unknown'
+  });
 
   // In production: POST to Brevo API or webhook
   // For now: show confirmation
